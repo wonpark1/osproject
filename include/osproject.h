@@ -3,6 +3,7 @@
 
 #define MAXN 64
 #define MAXD 256
+#define MAX_ALIAS 20
 
 #include <time.h>
 
@@ -51,5 +52,17 @@ typedef struct tagSNode {
 typedef struct tagStack {
     SNode* TopNode;
 } Stack;
+
+
+typedef struct tagAlias {
+    char name[32];           // ex: ll
+    char command[128];       // ex: ls -al
+} Alias;
+
+typedef struct tagAliasTable {
+    Alias list[MAX_ALIAS];
+    int count;
+} AliasTable;
+
 
 #endif

@@ -1,4 +1,4 @@
-
+#include"../include/grep.h"
 #include "include/command.h"
 #include <string.h>
 #include <stdlib.h>
@@ -19,7 +19,14 @@ void ParseAndExecute(char* input) {
         command_ls(argc, argv);
     } else if (strcmp(argv[0], "mkdir") == 0) {
         command_mkdir(argc, argv);
-    } else {
+    }
+    else if (strcmp(argv[0], "grep") == 0) {
+        command_grep(argc, argv);//grep추가
+    }
+    else if (strcmp(argv[0], "rm") == 0) {
+        command_rm(argc, argv);//rm 추가
+    }
+    else {
         printf("🔍 Unknown command: %s\n", argv[0]);
     }
 }
@@ -60,6 +67,12 @@ void ParseAndExecute(DTree* tree, Stack* stack, UList* user, AliasTable* aliases
         command_alias(aliases, argc, argv);
     } else if (strcmp(argv[0], "cat") == 0) {
         command_cat(tree, argv[1]);
+    }
+    else if (strcmp(argv[0], "grep") == 0) {
+        command_grep(argc, argv);//혹시 몰라 여기도 넣었어요
+    }
+    else if (strcmp(argv[0], "rm") == 0) {
+        command_rm(argc, argv);//rm 추가
     }
 }
 

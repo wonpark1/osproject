@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "include/command.h"
+#include"../include/ls.h"
+#include"../include/grep.h"
 #include "include/osproject.h"
 
 
@@ -16,10 +18,11 @@ TNode* FindFileInCurrentDir(TNode* current, const char* name) {
 }
 
 
-void command_ls(int argc, char** argv) {
+/*void command_ls(int argc, char** argv) {
     printf("📁 executing 'ls'\n");
     // 여기서 디렉토리 트리를 탐색
-}
+    따로 파일 분리 일단 주석처리
+}*/
 
 void command_mkdir(int argc, char** argv) {
     if (argc < 2) {

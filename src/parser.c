@@ -22,7 +22,11 @@ void ParseAndExecute(char* input) {
     }
     else if (strcmp(argv[0], "grep") == 0) {
         command_grep(argc, argv);//grep추가
-    } else {
+    }
+    else if (strcmp(argv[0], "rm") == 0) {
+        command_rm(argc, argv);//rm 추가
+    }
+    else {
         printf("🔍 Unknown command: %s\n", argv[0]);
     }
 }
@@ -66,6 +70,9 @@ void ParseAndExecute(DTree* tree, Stack* stack, UList* user, AliasTable* aliases
     }
     else if (strcmp(argv[0], "grep") == 0) {
         command_grep(argc, argv);//혹시 몰라 여기도 넣었어요
+    }
+    else if (strcmp(argv[0], "rm") == 0) {
+        command_rm(argc, argv);//rm 추가
     }
 }
 

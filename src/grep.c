@@ -68,27 +68,27 @@ void command_grep(int argc, char** argv) {
             filename = argv[i];
         }
         else {
-            printf(" 인자가 너무 많습니다.\n");
+            printf("인자가 너무 많습니다.\n");
             printf("사용법: grep [-n] [-i] [-v] [-o] <검색어> <파일명>\n");
             return;
         }
     }
 
     if (!word || !filename) {
-        printf(" 검색어 또는 파일명이 빠졌습니다.\n");
+        printf("검색어 또는 파일명이 빠졌습니다.\n");
         printf("사용법: grep [-n] [-i] [-v] [-o] <검색어> <파일명>\n");
         return;
     }
 
     //-v와 -o는 함께 사용할 수 없음
     if (invert_match && only_matching) {
-        printf(" -o(일치 단어만 출력) 옵션은 -v(부정 검색) 옵션과 함께 사용할 수 없습니다.\n");
+        printf("-o(일치 단어만 출력) 옵션은 -v(부정 검색) 옵션과 함께 사용할 수 없습니다.\n");
         return;
     }
 
     FILE* file = fopen(filename, "r");
     if (!file) {
-        printf(" 파일을 열 수 없습니다: %s\n", filename);
+        printf("파일을 열 수 없습니다: %s\n", filename);
         return;
     }
 

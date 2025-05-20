@@ -2,8 +2,6 @@
 #include <string.h>
 #include "../include/ls.h"
 
-extern DTree* tree;//ÀüÃ¼Æ®¸®
-
 void print_permissions(int permission[9]) {
     const char* rwx = "rwx";
     for (int i = 0; i < 9; i++) {
@@ -11,9 +9,24 @@ void print_permissions(int permission[9]) {
     }
 }
 
-void command_ls(int argc, char** argv) {//Â÷º°Á¡ ÇÔ¼ö¸¦ ls,ls-a,ls-al·Î µû·Î ±¸ÇöÇÏÁö ¾Ê°í
-    int show_all = 0, long_format = 0;//ÇÑ¹ø¿¡ ±¸Çö + ¼ø¼­°¡ ls-la¿©µµ °¡´É
+void print_long_format(TNode* node) {
+    printf("%c", node->type);
+    print_permissions(node->permission);
+    printf(" %d %d %5d %02d-%02d %02d:%02d %s\n",
+        node->UID, node->GID, node->SIZE,
+        node->month, node->day, node->hour, node->minute,
+        node->name);
+}
 
+void print_short_format(TNode* node) {
+    if (strlen(node->name) < 8)
+        printf("%s\t\t", node->name);
+    else
+        printf("%s\t", node->name);
+}
+
+void command_ls(DTree* tree, int argc, char** argv) {
+    int show_all = 0, long_format = 0;
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-a") == 0) show_all = 1;
         else if (strcmp(argv[i], "-l") == 0) long_format = 1;
@@ -21,27 +34,41 @@ void command_ls(int argc, char** argv) {//Â÷º°Á¡ ÇÔ¼ö¸¦ ls,ls-a,ls-al·Î µû·Î ±¸Ç
             show_all = long_format = 1;
     }
 
+    int count = 0;
+
+    if (show_all) {
+        // "." Ãâ·Â
+        TNode* current = tree->current;
+        if (long_format) print_long_format(current);
+        else print_short_format(current);
+        count++;
+
+        // ".." Ãâ·Â
+        TNode* parent = current->Parent;
+        if (parent) {
+            if (long_format) print_long_format(parent);
+            else print_short_format(parent);
+            count++;
+        }
+
+        if (!long_format && count % 5 == 0) printf("\n");
+    }
+
     TNode* node = tree->current->left;
-    while (node != NULL) {
+    while (node) {
         if (!show_all && node->name[0] == '.') {
             node = node->right;
             continue;
         }
 
-        if (long_format) {
-            printf("%c", node->type);
-            print_permissions(node->permission);
-            printf(" %d %d %5d %02d-%02d %02d:%02d %s\n",
-                node->UID, node->GID, node->SIZE,
-                node->month, node->day, node->hour, node->minute,
-                node->name);
-        }
+        if (long_format) print_long_format(node);
         else {
-            printf("%s  ", node->name);
+            print_short_format(node);
+            if (++count % 5 == 0) printf("\n");
         }
 
         node = node->right;
     }
 
-    if (!long_format) printf("\n");
+    if (!long_format && count % 5 != 0) printf("\n");
 }

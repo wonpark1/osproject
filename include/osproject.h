@@ -1,68 +1,47 @@
 #ifndef OSPROJECT_H
 #define OSPROJECT_H
 
-#define MAXN 64
-#define MAXD 256
-#define MAX_ALIAS 20
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
-#include <time.h>
 
-// 사용자 정보
-typedef struct tagUN {
-    char name[MAXN];
-    char dir[MAXD];
-    int year, month, wday, day, hour, minute, sec;
-    int UID, GID;
-    struct tagUN* linknode;
-} UNode;
+#ifndef MAXDIRECTORY
+#define MAXDIRECTORY 1024
+#endif
 
-typedef struct tagUser {
-    int tUID;
-    int tGID;
-    UNode* head;
-    UNode* tail;
-    UNode* current;
-} UList;
 
-// 디렉토리 트리
-typedef struct tagTN {
-    char name[MAXN];
-    char type;
-    int mode;
-    int permission[9];
-    int SIZE;
-    int UID, GID;
-    int month, day, hour, minute;
-    struct tagTN* Parent;
-    struct tagTN* left;
-    struct tagTN* right;
+typedef struct _tnode {
+    char  name[MAXDIRECTORY];   /* 파일/디렉터리 이름          */
+    char  type;                
+    struct _tnode *left, *right, *Parent;
 } TNode;
 
-typedef struct tagDTree {
-    TNode* root;
-    TNode* current;
+typedef struct {
+    TNode *root;                /* 루트 노드 ("/")             */
+    TNode *current;             /* 현재 작업 디렉터리          */
 } DTree;
 
-// 스택
-typedef struct tagSNode {
-    char name[MAXN];
-    struct tagSNode* linknode;
-} SNode;
 
-typedef struct tagStack {
-    SNode* TopNode;
-} Stack;
+typedef struct _unode {
+    char  dir[MAXDIRECTORY];    /* 절대 경로 문자열 (pwd용)    */
+    struct _unode *next;
+} UNode;
+
+typedef struct {
+    UNode *head;
+    UNode *current;             /* 로그인 중인 사용자          */
+} UList;
 
 
-typedef struct tagAlias {
-    char name[32];           // ex: ll
-    char command[128];       // ex: ls -al
-} Alias;
-
-typedef struct tagAliasTable {
-    Alias list[MAX_ALIAS];
-    int count;
+typedef struct {
+    char dummy;
 } AliasTable;
 
+/* ── 외부 API 프로토타입 (stub) ───────────── */
+TNode *ExistDir   (DTree *tree, const char *name, char type);
+int    IsPermission(TNode *node, char perm);          /* r/w/x → 0 = 허용 */
+int    MakeDir     (DTree *tree, char *name, char type);
+int    DeleteFile  (DTree *tree, char *name);
 
-#endif
+#endif /* OSPROJECT_H */

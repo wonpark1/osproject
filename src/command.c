@@ -95,3 +95,48 @@ void command_alias(AliasTable* table, int argc, char** argv) {
         }
     }
 }
+
+#include "include/command.h"
+
+/* `cd` --------------------------------------------------------------------- */
+int command_cd(DTree *tree, UList *users, int argc, char **argv)
+{
+    int status;
+
+    if (argc > 2) {
+        puts("cd: too many arguments");
+        return -1;
+    }
+
+    /* 실제 cd 실행 */
+    status = cd(tree, (argc == 2) ? argv[1] : NULL);
+
+    /* 성공 시 UList 의 dir 필드 갱신 */
+    if (status == 0)
+        UpdateUserDir(users, tree);
+
+    return status;
+}
+
+/* `pwd` -------------------------------------------------------------------- */
+int command_pwd(DTree *tree, Stack *stack, UList *users)
+{
+    /* users->current->dir 에 값이 있다면 그대로 사용 */
+    UNode *me = users ? users->current : NULL;
+    if (me && me->dir && me->dir[0] != '\0') {
+        puts(me->dir);
+        return 0;
+    }
+    /* 없다면 트리를 탐색해 즉석 계산 */
+    return pwd(tree, stack, NULL);
+}
+
+/* `cp` --------------------------------------------------------------------- */
+int command_cp(DTree *tree, int argc, char **argv)
+{
+    if (argc != 3) {
+        puts("Usage: cp <source> <destination>");
+        return -1;
+    }
+    return cp(tree, argv[1], argv[2]);
+}

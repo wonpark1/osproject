@@ -3,6 +3,6 @@
 
 #include "osproject.h"
 
-void command_ls(int argc, char** argv);
+void command_ls(DTree* tree, int argc, char** argv);
 
 #endif

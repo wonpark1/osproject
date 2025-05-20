@@ -18,9 +18,7 @@ int  Movecurrent(DTree *tree, char *segment);
 
 int  pwd        (DTree *tree, Stack *stack, char *opt);
 int  PrintPath  (DTree *tree, Stack *stack);
-
 int  cp         (DTree *tree, char *src, char *dst);
 
-/* UList 의 dir 멤버를 현재 경로로 갱신 */
 void UpdateUserDir(UList *users, DTree *tree);
 #endif
